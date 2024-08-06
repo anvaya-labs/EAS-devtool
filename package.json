@@ -10,8 +10,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ethereum-attestation-service/eas-sdk": "^2.5.0",
+    "@tanstack/react-query": "^5.51.21",
+    "connectkit": "^1.8.2",
+    "ethers": "^6.13.2",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0",
+    "viem": "^2.18.8",
+    "wagmi": "^2.12.2"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
