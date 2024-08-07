@@ -8,17 +8,12 @@ const config = createConfig(
     // Your dApps chains
     chains: [mainnet, sepolia],
     transports: {
-      // RPC URL for each chain
-      [mainnet.id]: http(
-        `https://eth-mainnet.g.alchemy.com/v2/vdSQbJ3Cva_LfKySU8BoGjJncLQcQYvv`
-      ),
-      [sepolia.id]: http(
-        `https://eth-sepolia.g.alchemy.com/v2/vdSQbJ3Cva_LfKySU8BoGjJncLQcQYvv`
-      ),
+      [mainnet.id]: http(import.meta.env.VITE_MAINNET_URL),
+      [sepolia.id]: http(import.meta.env.VITE_SEPOLIA_URL),
     },
 
     // Required API Keys
-    walletConnectProjectId: "56b731ee9c63199189532bf27554fe6d" as string,
+    walletConnectProjectId: import.meta.env.VITE_WALLET_CONNECT_ID as string,
 
     // Required App Info
     appName: "EAS",
@@ -33,6 +28,7 @@ const config = createConfig(
 const queryClient = new QueryClient();
 
 export const Web3Provider = ({ children }: { children: React.ReactNode }) => {
+  console.log(import.meta.env.VITE_WALLET_CONNECT_ID);
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
