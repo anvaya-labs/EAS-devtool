@@ -23,6 +23,8 @@ import { CreditCard, PlusIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CreateSchema } from "@/features";
 import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_ATTESTATIONS } from "@/utils/get-attestations";
 
 //@ts-ignore
 
@@ -144,6 +146,11 @@ export const HomeScreen = () => {
     }
   };
 
+  const { loading, error, data } = useQuery(GET_ATTESTATIONS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -237,6 +244,24 @@ export const HomeScreen = () => {
         isSchemaModelActive={isSchemaModelActive}
         setIsSchemeModelActive={setIsSchemeModelActive}
       />
+
+      <div>
+        <h1>Attestations</h1>
+        <ul>
+          {data.attestations.map((attestation: any) => (
+            <li key={attestation.id}>
+              <p>ID: {attestation.id}</p>
+              <p>Attester: {attestation.attester}</p>
+              <p>Recipient: {attestation.recipient}</p>
+              <p>RefUID: {attestation.refUID}</p>
+              <p>Revocable: {attestation.revocable.toString()}</p>
+              <p>Revocation Time: {attestation.revocationTime}</p>
+              <p>Expiration Time: {attestation.expirationTime}</p>
+              <p>Data: {attestation.data}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
