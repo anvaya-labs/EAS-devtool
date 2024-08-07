@@ -7,10 +7,72 @@ import {
   SchemaRegistry,
 } from "@ethereum-attestation-service/eas-sdk";
 import { ethers } from "ethers";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useEthersSigner } from "../../utils/wagmi-utils";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CreditCard, PlusIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CreateSchema } from "@/features";
+import { useState } from "react";
+
 //@ts-ignore
 
+const invoices = [
+  {
+    invoice: "INV001",
+    paymentStatus: "Paid",
+    totalAmount: "$250.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV002",
+    paymentStatus: "Pending",
+    totalAmount: "$150.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV003",
+    paymentStatus: "Unpaid",
+    totalAmount: "$350.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV004",
+    paymentStatus: "Paid",
+    totalAmount: "$450.00",
+    paymentMethod: "Credit Card",
+  },
+  {
+    invoice: "INV005",
+    paymentStatus: "Paid",
+    totalAmount: "$550.00",
+    paymentMethod: "PayPal",
+  },
+  {
+    invoice: "INV006",
+    paymentStatus: "Pending",
+    totalAmount: "$200.00",
+    paymentMethod: "Bank Transfer",
+  },
+  {
+    invoice: "INV007",
+    paymentStatus: "Unpaid",
+    totalAmount: "$300.00",
+    paymentMethod: "Credit Card",
+  },
+];
+
 export const HomeScreen = () => {
+  const [isSchemaModelActive, setIsSchemeModelActive] = useState(false);
   const account = useAccount();
 
   const signer = useEthersSigner();
@@ -84,14 +146,97 @@ export const HomeScreen = () => {
 
   return (
     <div>
-      <h1>Home</h1>
-      <p>Welcome to the Home page!</p>
-      <p>Your account: {account?.status}</p>
-      <ConnectKitButton />
+      <div className="flex items-center justify-between">
+        <p className="text-lg font-semibold">Welcome Back!!</p>
+        <Button
+          onClick={() => {
+            setIsSchemeModelActive(true);
+          }}
+        >
+          <PlusIcon className="mr-2 h-4 w-4" /> New Schema
+        </Button>
+      </div>
 
-      <button onClick={registerSchema}>Create Schema</button>
+      {/* <button onClick={registerSchema}>Create Schema</button>
       <button onClick={getSchemeInfo}>get Schema info</button>
-      <button onClick={getAttastation}>get Attestation</button>
+      <button onClick={getAttastation}>get Attestation</button> */}
+
+      <div className="grid grid-cols-3 gap-3 mt-4 mb-4">
+        <Card x-chunk="dashboard-01-chunk-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Sales</CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12,234</div>
+            <p className="text-xs text-muted-foreground">
+              +19% from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card x-chunk="dashboard-01-chunk-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Sales</CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12,234</div>
+            <p className="text-xs text-muted-foreground">
+              +19% from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card x-chunk="dashboard-01-chunk-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Sales</CardTitle>
+            <CreditCard className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12,234</div>
+            <p className="text-xs text-muted-foreground">
+              +19% from last month
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div>
+        <Table>
+          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px]">Invoice</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Method</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {invoices.map((invoice) => (
+              <TableRow key={invoice.invoice}>
+                <TableCell className="font-medium">{invoice.invoice}</TableCell>
+                <TableCell>{invoice.paymentStatus}</TableCell>
+                <TableCell>{invoice.paymentMethod}</TableCell>
+                <TableCell className="text-right">
+                  {invoice.totalAmount}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={3}>Total</TableCell>
+              <TableCell className="text-right">$2,500.00</TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+      </div>
+      <CreateSchema
+        isSchemaModelActive={isSchemaModelActive}
+        setIsSchemeModelActive={setIsSchemeModelActive}
+      />
     </div>
   );
 };
