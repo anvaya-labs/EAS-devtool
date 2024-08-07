@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@apollo/client": "^3.11.4",
     "@ethereum-attestation-service/eas-sdk": "^2.5.0",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
@@ -48,6 +49,7 @@
     "date-fns": "^3.6.0",
     "embla-carousel-react": "^8.1.8",
     "ethers": "^6.13.2",
+    "graphql": "^16.9.0",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.424.0",
     "next-themes": "^0.3.0",
