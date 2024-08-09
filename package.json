@@ -51,6 +51,7 @@
     "ethers": "^6.13.2",
     "graphql": "^16.9.0",
     "input-otp": "^1.2.4",
+    "intl": "^1.2.5",
     "lucide-react": "^0.424.0",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",
@@ -69,6 +70,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/intl": "^1.2.2",
     "@types/node": "^22.1.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

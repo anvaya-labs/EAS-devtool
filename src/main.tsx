@@ -4,6 +4,7 @@ import { App } from "./App.tsx";
 import { Web3Provider } from "./components/Web3Provider.tsx";
 import "./index.css";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import { ThemeProvider } from "./theme/theme-provider.tsx";
 
 const client = new ApolloClient({
   uri: "https://sepolia.easscan.org/graphql",
@@ -12,10 +13,12 @@ const client = new ApolloClient({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <Web3Provider>
-      <ApolloProvider client={client}>
-        <App />
-      </ApolloProvider>
-    </Web3Provider>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <Web3Provider>
+        <ApolloProvider client={client}>
+          <App />
+        </ApolloProvider>
+      </Web3Provider>
+    </ThemeProvider>
   </React.StrictMode>
 );

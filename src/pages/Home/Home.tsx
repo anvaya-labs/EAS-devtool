@@ -1,12 +1,31 @@
-import { ConnectKitButton } from "connectkit";
-import { useAccount } from "wagmi";
+import { useState } from "react";
+import { CopyIcon, TrashIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 import {
-  EAS,
-  Offchain,
-  SchemaEncoder,
-  SchemaRegistry,
-} from "@ethereum-attestation-service/eas-sdk";
-import { ethers } from "ethers";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useQuery } from "@apollo/client";
+import { GET_ATTESTATIONS } from "@/utils/get-attestations";
+import { useEnsName } from "wagmi";
+
 import {
   Table,
   TableBody,
@@ -17,136 +36,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useEthersSigner } from "../../utils/wagmi-utils";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CreditCard, PlusIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { CreateSchema } from "@/features";
-import { useState } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_ATTESTATIONS } from "@/utils/get-attestations";
+import { formatDate } from "@/utils/format";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationPrevious,
+  PaginationLink,
+  PaginationEllipsis,
+  PaginationNext,
+} from "@/components/ui/pagination";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { StatsCard } from "@/components";
 
 //@ts-ignore
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
-
 export const HomeScreen = () => {
   const [isSchemaModelActive, setIsSchemeModelActive] = useState(false);
-  const account = useAccount();
-
-  const signer = useEthersSigner();
-
-  const easContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; //sepolia
-  const schemeRegisteryAddress = "0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0"; //sepolia
-
-  const registerSchema = async () => {
-    try {
-      const schemaRegistry = new SchemaRegistry(schemeRegisteryAddress);
-      if (signer) {
-        schemaRegistry.connect(signer);
-
-        const schema = "string name, string place";
-        const resolverAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // if no resolver is needed
-        const revocable = false;
-
-        const transaction = await schemaRegistry.register({
-          schema,
-          resolverAddress,
-          revocable,
-        });
-
-        // Optional: Wait for transaction to be validated
-        const tx = await transaction.wait();
-
-        console.log("tx", tx);
-        console.log("transaction", transaction);
-        console.log("Schema registered successfully");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getSchemeInfo = async () => {
-    try {
-      const schemaRegistryContractAddress =
-        "0x0a7E2Ff54e76B8E6659aedc9103FB21c038050D0"; // Sepolia 0.26
-      const schemaRegistry = new SchemaRegistry(schemaRegistryContractAddress);
-      if (signer) {
-        schemaRegistry.connect(signer);
-        const schemaUID =
-          "0x72547d19683713df63d66f973e0d8eb94e1fc4fc2c8e8dcc7af9fe9770397043";
-
-        const schemaRecord = await schemaRegistry.getSchema({ uid: schemaUID });
-
-        console.log("schemaRecord", schemaRecord);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getAttastation = async () => {
-    try {
-      const eas = new EAS(easContractAddress);
-      if (signer) {
-        eas.connect(signer);
-        const uid =
-          "0xd1bb13671b1cf5a2e2bdf1396d7985d6552fc3e805c6f1c60f0ac9c7b2619677";
-
-        const attestation = await eas.getAttestation(uid);
-
-        console.log("attestation", attestation);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  const navigate = useNavigate();
   const { loading, error, data } = useQuery(GET_ATTESTATIONS);
+  console.log(data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -164,113 +77,119 @@ export const HomeScreen = () => {
         </Button>
       </div>
 
-      {/* <button onClick={registerSchema}>Create Schema</button>
-      <button onClick={getSchemeInfo}>get Schema info</button>
-      <button onClick={getAttastation}>get Attestation</button> */}
-
-      <div className="grid grid-cols-3 gap-3 mt-4 mb-4">
-        <Card x-chunk="dashboard-01-chunk-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sales</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
-            <p className="text-xs text-muted-foreground">
-              +19% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card x-chunk="dashboard-01-chunk-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sales</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
-            <p className="text-xs text-muted-foreground">
-              +19% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card x-chunk="dashboard-01-chunk-2">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Sales</CardTitle>
-            <CreditCard className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
-            <p className="text-xs text-muted-foreground">
-              +19% from last month
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-3 gap-10 mt-4 mb-4">
+        <StatsCard
+          title="OffChain Attestation"
+          value="200"
+          change="+4.5%"
+          changeText="from last week"
+          changeColor="bg-lime-400/20 text-lime-700"
+        />
+        <StatsCard
+          title="OffChain Attestation"
+          value="200"
+          change="+4.5%"
+          changeText="from last week"
+          changeColor="bg-lime-400/20 text-lime-700"
+        />
       </div>
 
-      <div>
-        <Table>
-          <TableCaption>A list of your recent invoices.</TableCaption>
+      <div className="mt-10 ">
+        <h2 className="text-base/7 font-semibold text-zinc-950 sm:text-sm/6 dark:text-white">
+          My Schemas
+        </h2>
+        {/* <Table>
+          <TableCaption>A list of your recent attestations.</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Invoice</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="w-[100px]">ID</TableHead>
+              <TableHead>Attester</TableHead>
+              <TableHead>Recipient</TableHead>
+              <TableHead>RefUID</TableHead>
+              <TableHead>Revocable</TableHead>
+              <TableHead>Revocation Time</TableHead>
+              <TableHead>Expiration Time</TableHead>
+              <TableHead>Data</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="font-medium">{invoice.invoice}</TableCell>
-                <TableCell>{invoice.paymentStatus}</TableCell>
-                <TableCell>{invoice.paymentMethod}</TableCell>
-                <TableCell className="text-right">
-                  {invoice.totalAmount}
-                </TableCell>
+            {data.attestations.map((attestation: any) => (
+              <TableRow
+                key={attestation.id}
+                onClick={() => navigate(`/schema/view/${attestation.id}`)}
+              >
+                <TableCell className="font-medium">{attestation.id}</TableCell>
+                <TableCell>{attestation.attester}</TableCell>
+                <TableCell>{attestation.recipient}</TableCell>
+                <TableCell>{attestation.refUID}</TableCell>
+                <TableCell>{attestation.revocable.toString()}</TableCell>
+                <TableCell>{formatDate(attestation.revocationTime)}</TableCell>
+                <TableCell>{formatDate(attestation.expirationTime)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
-          <TableFooter>
+        </Table> */}
+
+        <Table className="mt-4 cursor-pointer">
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={3}>Total</TableCell>
-              <TableCell className="text-right">$2,500.00</TableCell>
+              <TableHead className="px-4 py-4">ID</TableHead>
+              <TableHead className="px-4 py-4">UID</TableHead>
+              <TableHead className="px-4 py-4">Schema</TableHead>
+              <TableHead className="px-4 py-4">Attestations</TableHead>
             </TableRow>
-          </TableFooter>
+          </TableHeader>
+          <TableBody>
+            {data.attestations.map((attestation: any) => (
+              <TableRow
+                key={attestation.id}
+                onClick={() => navigate(`/schema/view/${attestation.id}`)}
+              >
+                <TableCell className="font-medium px-4 py-4">#01</TableCell>
+                <TableCell className="px-4 py-4">
+                  {attestation.refUID}
+                </TableCell>
+                <TableCell className="px-4 py-4">
+                  <Badge variant="secondary">String</Badge>{" "}
+                  <Badge variant="secondary">Bool</Badge>
+                </TableCell>
+                <TableCell className="px-4 py-4">5</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
+      </div>
+
+      <div>
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious href="#" />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext href="#" />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </div>
       <CreateSchema
         isSchemaModelActive={isSchemaModelActive}
         setIsSchemeModelActive={setIsSchemeModelActive}
       />
-
-      <div>
-        <h1>Attestations</h1>
-        <ul>
-          {data.attestations.map((attestation: any) => (
-            <li key={attestation.id}>
-              <p>ID: {attestation.id}</p>
-              <p>Attester: {attestation.attester}</p>
-              <p>Recipient: {attestation.recipient}</p>
-              <p>RefUID: {attestation.refUID}</p>
-              <p>Revocable: {attestation.revocable.toString()}</p>
-              <p>Revocation Time: {attestation.revocationTime}</p>
-              <p>Expiration Time: {attestation.expirationTime}</p>
-              <p>Data: {attestation.data}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };
-
-//Todo
-
-/**
- * [] create new schema
- * [] get a schema created by them
- *  [] attest the schema
- * [] get all attestation made by them
- */
