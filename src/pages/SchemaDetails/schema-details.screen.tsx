@@ -23,7 +23,7 @@ export const SchemaDetailScreen = () => {
         <Badge variant="secondary" className="text-lg">
           #20
         </Badge>{" "}
-        <p className="text-lg">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+        <p className="text-lg">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
       </div>
 
       <div className="grid grid-cols-3 gap-20">
