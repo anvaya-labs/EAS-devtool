@@ -12,6 +12,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { CreditCard } from "lucide-react";
 import { StatsCard } from "@/components";
+import { Alert } from "@/components/ui/alert";
 
 export const SchemaDetailScreen = () => {
   const { schemaId } = useParams();
@@ -94,6 +95,19 @@ export const SchemaDetailScreen = () => {
             </dd>
 
             <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+              Resolver Contract
+            </dt>
+            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+              xxxxxxxxxxxxxxxxxxxxx
+              <div>
+                <Alert variant="destructive" className="mt-2">
+                  This schema is using a custom resolver contract. Only interact
+                  with schemas you trust and have verified.{" "}
+                </Alert>
+              </div>
+            </dd>
+
+            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
               Revocable Attestations
             </dt>
             <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
@@ -122,10 +136,12 @@ export const SchemaDetailScreen = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="px-4 py-4">ID</TableHead>
               <TableHead className="px-4 py-4">UID</TableHead>
               <TableHead className="px-4 py-4">Schema</TableHead>
-              <TableHead className="px-4 py-4">Attestations</TableHead>
+              <TableHead className="px-4 py-4">From</TableHead>
+              <TableHead className="px-4 py-4">To</TableHead>
+              <TableHead className="px-4 py-4">Attestation Type</TableHead>
+              <TableHead className="px-4 py-4">Age</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -133,39 +149,16 @@ export const SchemaDetailScreen = () => {
               key={"attestation.id"}
               onClick={() => navigate(`/schema/view/${"attestation.id"}`)}
             >
-              <TableCell className="font-medium px-4 py-4">#01</TableCell>
-              <TableCell className="px-4 py-4">12333</TableCell>
-              <TableCell className="px-4 py-4">
-                <Badge variant="secondary">String</Badge>{" "}
-                <Badge variant="secondary">Bool</Badge>
+              <TableCell className="font-medium px-4 py-4">
+                xxxxxxxxxxxxxxxxxxxxxxxxxx
               </TableCell>
-              <TableCell className="px-4 py-4">5</TableCell>
-            </TableRow>
-
-            <TableRow
-              key={"attestation.id"}
-              onClick={() => navigate(`/schema/view/${"attestation.id"}`)}
-            >
-              <TableCell className="font-medium px-4 py-4">#01</TableCell>
-              <TableCell className="px-4 py-4">12333</TableCell>
               <TableCell className="px-4 py-4">
-                <Badge variant="secondary">String</Badge>{" "}
-                <Badge variant="secondary">Bool</Badge>
+                <Badge variant="secondary">#244</Badge>{" "}
               </TableCell>
-              <TableCell className="px-4 py-4">5</TableCell>
-            </TableRow>
-
-            <TableRow
-              key={"attestation.id"}
-              onClick={() => navigate(`/schema/view/${"attestation.id"}`)}
-            >
-              <TableCell className="font-medium px-4 py-4">#01</TableCell>
-              <TableCell className="px-4 py-4">12333</TableCell>
-              <TableCell className="px-4 py-4">
-                <Badge variant="secondary">String</Badge>{" "}
-                <Badge variant="secondary">Bool</Badge>
-              </TableCell>
-              <TableCell className="px-4 py-4">5</TableCell>
+              <TableCell className="px-4 py-4">koushith.eth</TableCell>
+              <TableCell className="px-4 py-4">sweta.eth</TableCell>
+              <TableCell className="px-4 py-4">OnChain</TableCell>
+              <TableCell className="px-4 py-4">4 hours ago</TableCell>
             </TableRow>
           </TableBody>
         </Table>
