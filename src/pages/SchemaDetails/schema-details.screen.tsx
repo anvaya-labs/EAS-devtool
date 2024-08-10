@@ -9,119 +9,146 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate, useParams } from "react-router-dom";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CreditCard } from "lucide-react";
 import { StatsCard } from "@/components";
 import { Alert } from "@/components/ui/alert";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { GET_SCHEMA_BY_ID } from "@/utils/graphql-queries";
+import { formatDateTime } from "@/utils/format"; // Assuming you have this utility function
 
 export const SchemaDetailScreen = () => {
   const { schemaId } = useParams();
   const navigate = useNavigate();
+
+  const { loading, error, data } = useQuery(GET_SCHEMA_BY_ID, {
+    variables: {
+      where: {
+        id: "0x69c1d84f18dd90216065aeb6d8ce2f64360cbc6646fa3f2dace2bde9d7f77bec",
+      },
+    },
+  });
+
+  console.log("data- schema details", data);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const schema = data?.getSchema;
+  const attestations = schema?.attestations || [];
+
   return (
     <>
       <div className="flex gap-4">
         <Badge variant="secondary" className="text-lg">
-          #20
+          #{schema?.index}
         </Badge>{" "}
-        <p className="text-lg">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</p>
+        <p className="text-lg">{schema?.id}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-20">
         <StatsCard
           title="Total Attestation"
-          value="200"
+          value={attestations.length}
+          change="+4.5%"
+          changeText="from last week"
+          changeColor="bg-lime-400/20 text-lime-700"
+        />
+        <StatsCard
+          title="OnChain Attestation"
+          value={attestations.filter((a: any) => !a.isOffchain).length}
           change="+4.5%"
           changeText="from last week"
           changeColor="bg-lime-400/20 text-lime-700"
         />
         <StatsCard
           title="OffChain Attestation"
-          value="200"
-          change="+4.5%"
-          changeText="from last week"
-          changeColor="bg-lime-400/20 text-lime-700"
-        />
-        <StatsCard
-          title="OffChain Attestation"
-          value="200"
+          value={attestations.filter((a: any) => a.isOffchain).length}
           change="+4.5%"
           changeText="from last week"
           changeColor="bg-lime-400/20 text-lime-700"
         />
       </div>
 
-      <div>
-        <div className="mt-12">
-          <h2 className="text-base/7 font-semibold text-zinc-950 sm:text-sm/6 dark:text-white">
-            Summary
-          </h2>
+      <div className="mt-6">
+        <h2 className="text-base/7 font-semibold text-zinc-950 sm:text-sm/6 dark:text-white">
+          Summary
+        </h2>
 
-          <hr
-            role="presentation"
-            className="mt-4 w-full border-t border-zinc-950/10 dark:border-white/10"
-          />
-          <dl className="grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,theme(spacing.80))_auto] sm:text-sm/6">
-            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
-              Created On
-            </dt>
-            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-              08/10/2024 1:27:24 am (39 minutes ago)
-            </dd>
+        <hr
+          role="presentation"
+          className="mt-4 w-full border-t border-zinc-950/10 dark:border-white/10"
+        />
+        <dl className="grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,theme(spacing.80))_auto] sm:text-sm/6">
+          <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+            Created On
+          </dt>
+          <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+            {formatDateTime(schema?.time)}
+          </dd>
 
-            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
-              Creator
-            </dt>
-            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-              <a className="flex items-center gap-2" href="/events/1000">
-                <span
-                  data-slot="avatar"
-                  className="size-6 inline-grid shrink-0 align-middle [--avatar-radius:20%] [--ring-opacity:20%] *:col-start-1 *:row-start-1 outline outline-1 -outline-offset-1 outline-black/[--ring-opacity] dark:outline-white/[--ring-opacity] rounded-full *:rounded-full"
-                >
-                  <img
-                    className="size-full"
-                    src="https://pbs.twimg.com/profile_images/1733931010977640448/KTlA02mC_400x400.jpg"
-                    alt=""
-                  />
-                </span>
-                <span>Koushith.eth</span>
-              </a>
-            </dd>
+          <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+            Creator
+          </dt>
+          <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+            <a
+              className="flex items-center gap-2"
+              href={`/events/${schema?.id}`}
+            >
+              <span
+                data-slot="avatar"
+                className="size-6 inline-grid shrink-0 align-middle [--avatar-radius:20%] [--ring-opacity:20%] *:col-start-1 *:row-start-1 outline outline-1 -outline-offset-1 outline-black/[--ring-opacity] dark:outline-white/[--ring-opacity] rounded-full *:rounded-full"
+              >
+                <img
+                  className="size-full"
+                  src="https://pbs.twimg.com/profile_images/1733931010977640448/KTlA02mC_400x400.jpg"
+                  alt=""
+                />
+              </span>
+              <span>{schema?.creator}</span>
+            </a>
+          </dd>
 
-            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
-              Transaction ID
-            </dt>
-            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-              xxxxxxxxxxxxxxxxxxxxx
-            </dd>
+          <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+            Transaction ID
+          </dt>
+          <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+            {schema?.txid}
+          </dd>
 
-            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
-              Resolver Contract
-            </dt>
-            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-              xxxxxxxxxxxxxxxxxxxxx
+          <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+            Resolver Contract
+          </dt>
+          <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+            {schema?.resolver}
+            {schema?.resolver !==
+              "0x0000000000000000000000000000000000000000" && (
               <div>
                 <Alert variant="destructive" className="mt-2">
                   This schema is using a custom resolver contract. Only interact
-                  with schemas you trust and have verified.{" "}
+                  with schemas you trust and have verified.
                 </Alert>
               </div>
-            </dd>
+            )}
+          </dd>
 
-            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
-              Revocable Attestations
-            </dt>
-            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-              No
-            </dd>
+          <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+            Revocable Attestations
+          </dt>
+          <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+            {schema?.revocable ? "Yes" : "No"}
+          </dd>
 
-            <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
-              Schema
-            </dt>
-            <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-              <code>uint name</code>
-            </dd>
-          </dl>
-        </div>
+          <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
+            Schema
+          </dt>
+          <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
+            <SyntaxHighlighter language="javascript" style={docco}>
+              {schema?.schema}
+            </SyntaxHighlighter>
+          </dd>
+        </dl>
       </div>
 
       <div>
@@ -144,24 +171,45 @@ export const SchemaDetailScreen = () => {
               <TableHead className="px-4 py-4">Age</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
-            <TableRow
-              key={"attestation.id"}
-              onClick={() => navigate(`/schema/view/${"attestation.id"}`)}
-            >
-              <TableCell className="font-medium px-4 py-4">
-                xxxxxxxxxxxxxxxxxxxxxxxxxx
-              </TableCell>
-              <TableCell className="px-4 py-4">
-                <Badge variant="secondary">#244</Badge>{" "}
-              </TableCell>
-              <TableCell className="px-4 py-4">koushith.eth</TableCell>
-              <TableCell className="px-4 py-4">sweta.eth</TableCell>
-              <TableCell className="px-4 py-4">OnChain</TableCell>
-              <TableCell className="px-4 py-4">4 hours ago</TableCell>
-            </TableRow>
+          <TableBody className="cursor-pointer">
+            {attestations.map((attestation: any) => (
+              <TableRow
+                key={attestation.id}
+                onClick={() => navigate(`/attestation/view/${attestation.id}`)}
+              >
+                <TableCell className="font-medium px-4 py-4">
+                  {attestation.id}
+                </TableCell>
+                <TableCell className="px-4 py-4">
+                  <Badge variant="secondary">#{attestation.schema.index}</Badge>{" "}
+                </TableCell>
+                <TableCell className="px-4 py-4">
+                  {attestation.attester}
+                </TableCell>
+                <TableCell className="px-4 py-4">
+                  {attestation.recipient}
+                </TableCell>
+                <TableCell className="px-4 py-4">
+                  {attestation.isOffchain ? "OffChain" : "OnChain"}
+                </TableCell>
+                <TableCell className="px-4 py-4">
+                  {formatDateTime(attestation.time)}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
+
+        <div className="mt-10 flex items-center justify-center ">
+          <div>
+            <Button
+              variant="secondary"
+              className="flex items-center justify-center w-full"
+            >
+              View All Attestations
+            </Button>
+          </div>
+        </div>
       </div>
     </>
   );

@@ -1,45 +1,21 @@
 import { useState } from "react";
-import { CopyIcon, TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useQuery } from "@apollo/client";
-import { GET_ATTESTATIONS } from "@/utils/get-attestations";
-import { useEnsName } from "wagmi";
+import {
+  GET_ATTESTATIONS,
+  GET_ATTESTATIONS_BY_WALLET_ID,
+} from "@/utils/graphql-queries";
 
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { CreditCard, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { CreateSchema } from "@/features";
-import { formatDate } from "@/utils/format";
 import {
   Pagination,
   PaginationContent,
@@ -58,7 +34,16 @@ import { StatsCard } from "@/components";
 export const HomeScreen = () => {
   const [isSchemaModelActive, setIsSchemeModelActive] = useState(false);
   const navigate = useNavigate();
-  const { loading, error, data } = useQuery(GET_ATTESTATIONS);
+  const { loading, error, data } = useQuery(GET_ATTESTATIONS_BY_WALLET_ID, {
+    variables: {
+      where: {
+        attester: {
+          equals: "0x9ccCA0a968A9bc5916E0de43Ea2D68321655ae67",
+        },
+      },
+    },
+  });
+
   console.log(data);
 
   if (loading) return <p>Loading...</p>;
