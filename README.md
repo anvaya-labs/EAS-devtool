@@ -1,9 +1,10 @@
 
+
 # EAS DevTool & UI Kit
 
 This project is built on top of the Ethereum Attestation Service (EAS). The problem with EASScan is that it doesn't allow users to view their own schemas and attestations in one centralized place—everything is scattered. The role of explorers should be to provide essential stats and easy access to key information.
 
-This project has two main components:
+## This project has two main components:
 
 1. **DevTool**: A platform where you can manage, view, and attest data. It provides a comprehensive interface to interact with your schemas and attestations.
 2. **EAS UI Kit**: A plug-and-play React component designed to create and attest schemas seamlessly. Think of it as the WalletConnect button, but for EAS.
@@ -68,7 +69,6 @@ Ensure you have the following installed:
 
 ### Usage
 
-
 - **DevTool**: Navigate to the `/devtool` path to manage, view, and attest your EAS data.
 - **EAS UI Kit**: Import and integrate the UI Kit into your React components to enable schema creation and attestation.
 
@@ -78,5 +78,15 @@ Contributions are welcome! If you'd like to contribute, please fork the reposito
 
 ### Developers
 
-Koushith Amin
-Sweta Shaw
+**Koushith Amin**
+
+- **Twitter**: [@koushith](https://twitter.com/koushithamin)
+- **LinkedIn**: [Koushith Amin](https://www.linkedin.com/in)
+- **GitHub**: [koushith](https://github.com/koushith)
+
+**Sweta Shaw**
+
+- **Twitter**: [@sweta](https://twitter.com/)
+- **LinkedIn**: [Sweta Shaw](https://www.linkedin.com/)
+- **GitHub**: [swetashaw](https://github.com/)
+
