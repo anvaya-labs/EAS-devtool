@@ -63,7 +63,16 @@ Ensure you have the following installed:
    yarn install
    ```
 
+### Screenshots
+<img width="1782" alt="Screenshot 2024-08-11 at 3 24 41 AM" src="https://github.com/user-attachments/assets/4b587dde-e774-47da-b889-45e84cd31b50">
+<img width="1792" alt="Screenshot 2024-08-11 at 3 18 59 AM" src="https://github.com/user-attachments/assets/cce4caad-1b25-43bb-b3be-e1a0c13602eb">
+<img width="1782" alt="Screenshot 2024-08-11 at 3 23 50 AM" src="https://github.com/user-attachments/assets/b68d8419-0398-43b6-b935-b9a8a04e8b83">
+<img width="1782" alt="Screenshot 2024-08-11 at 3 24 41 AM" src="https://github.com/user-attachments/assets/bf2a1b61-2bcd-444f-9e8e-21566d342fcc">
+<img width="1782" alt="Screenshot 2024-08-11 at 3 25 56 AM" src="https://github.com/user-attachments/assets/df492018-9e7c-4af7-94ba-25be8ae8fc83">
+
+
 ### Usage
+
 
 - **DevTool**: Navigate to the `/devtool` path to manage, view, and attest your EAS data.
 - **EAS UI Kit**: Import and integrate the UI Kit into your React components to enable schema creation and attestation.
