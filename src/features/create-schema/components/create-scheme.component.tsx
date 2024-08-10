@@ -97,7 +97,7 @@ function CreateSchema(props: any) {
                     handleFieldChange(index, "name", e.target.value)
                   }
                   className="flex-1"
-                  placeholder="Enter name"
+                  placeholder="Enter Key Name"
                 />
               </div>
 

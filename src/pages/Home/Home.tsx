@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { StatsCard } from "@/components";
 import { useAccount } from "wagmi";
+import { truncateString } from "@/utils/misc";
 
 //@ts-ignore
 
@@ -123,7 +124,9 @@ export const HomeScreen = () => {
                 <TableCell className="font-medium px-4 py-4">
                   #{schema.index}
                 </TableCell>
-                <TableCell className="px-4 py-4">{schema.id}</TableCell>
+                <TableCell className="px-4 py-4">
+                  {truncateString(schema.id)}
+                </TableCell>
                 <TableCell className="px-4 py-4">
                   {schema.schema
                     .split(", ")
@@ -142,7 +145,7 @@ export const HomeScreen = () => {
         </Table>
       </div>
 
-      <div>
+      <div className="flex items-center justify-center mt-10">
         <Pagination>
           <PaginationContent>
             <PaginationItem>

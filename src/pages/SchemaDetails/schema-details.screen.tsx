@@ -15,7 +15,8 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { useQuery } from "@apollo/client";
 import { GET_SCHEMA_BY_ID } from "@/utils/graphql-queries";
-import { formatDateTime } from "@/utils/format"; // Assuming you have this utility function
+import { formatDateTime } from "@/utils/format";
+import { truncateString } from "@/utils/misc";
 
 export const SchemaDetailScreen = () => {
   const { schemaId } = useParams();
@@ -93,16 +94,6 @@ export const SchemaDetailScreen = () => {
               className="flex items-center gap-2"
               href={`/events/${schema?.id}`}
             >
-              <span
-                data-slot="avatar"
-                className="size-6 inline-grid shrink-0 align-middle [--avatar-radius:20%] [--ring-opacity:20%] *:col-start-1 *:row-start-1 outline outline-1 -outline-offset-1 outline-black/[--ring-opacity] dark:outline-white/[--ring-opacity] rounded-full *:rounded-full"
-              >
-                <img
-                  className="size-full"
-                  src="https://pbs.twimg.com/profile_images/1733931010977640448/KTlA02mC_400x400.jpg"
-                  alt=""
-                />
-              </span>
               <span>{schema?.creator}</span>
             </a>
           </dd>
@@ -111,7 +102,14 @@ export const SchemaDetailScreen = () => {
             Transaction ID
           </dt>
           <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
-            {schema?.txid}
+            <a
+              href={`https://sepolia.etherscan.io/tx/${schema?.txid}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              {schema?.txid}
+            </a>
           </dd>
 
           <dt className="col-start-1 border-t border-zinc-950/5 pt-3 text-zinc-500 first:border-none sm:border-t sm:border-zinc-950/5 sm:py-3 dark:border-white/5 dark:text-zinc-400 sm:dark:border-white/5">
@@ -160,12 +158,12 @@ export const SchemaDetailScreen = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="px-4 py-4">UID</TableHead>
               <TableHead className="px-4 py-4">Schema</TableHead>
+              <TableHead className="px-4 py-4">UID</TableHead>
               <TableHead className="px-4 py-4">From</TableHead>
               <TableHead className="px-4 py-4">To</TableHead>
               <TableHead className="px-4 py-4">Attestation Type</TableHead>
-              <TableHead className="px-4 py-4">Age</TableHead>
+              <TableHead className="px-4 py-4">Attestation Time</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="cursor-pointer">
@@ -174,17 +172,18 @@ export const SchemaDetailScreen = () => {
                 key={attestation.id}
                 onClick={() => navigate(`/attestation/view/${attestation.id}`)}
               >
-                <TableCell className="font-medium px-4 py-4">
-                  {attestation.id}
-                </TableCell>
                 <TableCell className="px-4 py-4">
                   <Badge variant="secondary">#{attestation.schema.index}</Badge>{" "}
                 </TableCell>
+                <TableCell className="font-medium px-4 py-4">
+                  {truncateString(attestation.id)}
+                </TableCell>
+
                 <TableCell className="px-4 py-4">
-                  {attestation.attester}
+                  {truncateString(attestation.attester)}
                 </TableCell>
                 <TableCell className="px-4 py-4">
-                  {attestation.recipient}
+                  {truncateString(attestation.recipient)}
                 </TableCell>
                 <TableCell className="px-4 py-4">
                   {attestation.isOffchain ? "OffChain" : "OnChain"}
