@@ -1,10 +1,5 @@
-Here’s a structured and polished README file based on your project description:
-
----
 
 # EAS DevTool & UI Kit
-
-## Overview
 
 This project is built on top of the Ethereum Attestation Service (EAS). The problem with EASScan is that it doesn't allow users to view their own schemas and attestations in one centralized place—everything is scattered. The role of explorers should be to provide essential stats and easy access to key information.
 
