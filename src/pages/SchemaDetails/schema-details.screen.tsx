@@ -13,7 +13,6 @@ import { StatsCard } from "@/components";
 import { Alert } from "@/components/ui/alert";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_SCHEMA_BY_ID } from "@/utils/graphql-queries";
 import { formatDateTime } from "@/utils/format"; // Assuming you have this utility function

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CopyIcon, TrashIcon } from "@radix-ui/react-icons";
+import { TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,7 +11,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -46,6 +45,7 @@ function CreateSchema(props: any) {
 
   const handleFieldChange = (index: number, field: string, value: any) => {
     const newFields = fields.slice();
+    //@ts-ignore
     newFields[index][field] = value;
     setFields(newFields);
   };

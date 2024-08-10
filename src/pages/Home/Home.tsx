@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@apollo/client";
-import {
-  GET_ATTESTATIONS,
-  GET_ATTESTATIONS_BY_WALLET_ID,
-} from "@/utils/graphql-queries";
+import { GET_ATTESTATIONS_BY_WALLET_ID } from "@/utils/graphql-queries";
 
 import {
   Table,
@@ -120,7 +117,7 @@ export const HomeScreen = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.schemata.map((schema: any, index: number) => (
+            {data.schemata.map((schema: any) => (
               <TableRow
                 key={schema.id}
                 onClick={() => navigate(`/schema/view/${schema.id}`)}
