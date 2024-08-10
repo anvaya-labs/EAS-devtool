@@ -3,12 +3,11 @@ import { formatDateTime } from "@/utils/format";
 import { GET_ATTESTATION_BY_ID } from "@/utils/graphql-queries";
 import { useQuery } from "@apollo/client";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export const AttestationDetails = () => {
-  const navigate = useNavigate();
   const { attestationId } = useParams();
 
   const { loading, error, data } = useQuery(GET_ATTESTATION_BY_ID, {
@@ -18,8 +17,6 @@ export const AttestationDetails = () => {
       },
     },
   });
-
-  console.log(data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -33,7 +30,7 @@ export const AttestationDetails = () => {
     <div>
       <>
         <Badge>
-          {data?.getAttestation?.isOffChain === true
+          {data?.getAttestation?.isOffChain
             ? "OffChain Attestation"
             : "OnChain Attestation"}
         </Badge>
@@ -181,7 +178,7 @@ export const AttestationDetails = () => {
                 className="p-4 rounded-sm w-[900px]"
                 style={{ background: "rgb(248, 248, 255)" }}
               >
-                {decodedData.map((item: any, index: any) => (
+                {/* {decodedData.map((item: any, index: any) => (
                   <div
                     key={index}
                     className="flex flex-row items-center rounded-sm gap-4 cursor-pointer bg-lime-400/20 mb-2"
@@ -197,7 +194,45 @@ export const AttestationDetails = () => {
                       </p>
                     </div>
                   </div>
-                ))}
+                ))} */}
+                {decodedData?.map((item: any, index: number) => (
+                  <div
+                    key={index}
+                    className="flex flex-row items-center rounded-sm gap-4 cursor-pointer bg-lime-400/20 mb-2"
+                  >
+                    <div className="bg-primary text-white p-4">
+                      <p className="uppercase">
+                        {item?.name ?? "Unknown Name"}{" "}
+                      </p>
+                    </div>
+                    <div className="text-lime-700">
+                      <p>
+                        {(() => {
+                          try {
+                            // Check if there's a value and whether it's in hex format - GPT code
+                            if (item?.value?.value?.hex) {
+                              return parseInt(item.value.value.hex, 16);
+                            } else if (item?.value?.value !== undefined) {
+                              return item.value.value;
+                            } else if (item?.value !== undefined) {
+                              return item.value;
+                            } else if (
+                              typeof item === "string" ||
+                              typeof item === "number"
+                            ) {
+                              return item; // Directly return the item if it's a primitive
+                            } else {
+                              return "N/A";
+                            }
+                          } catch (error) {
+                            console.error("Error parsing value:", error);
+                            return "Error";
+                          }
+                        })()}
+                      </p>
+                    </div>
+                  </div>
+                )) ?? <p>No decoded data available.</p>}
               </div>
             </dd>
 

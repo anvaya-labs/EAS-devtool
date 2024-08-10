@@ -52,6 +52,22 @@ export const HomeScreen = () => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  const offChainCount = data.schemata.reduce((acc: number, schema: any) => {
+    return (
+      acc +
+      schema.attestations.filter((attestation: any) => attestation.isOffchain)
+        .length
+    );
+  }, 0);
+
+  const onChainCount = data.schemata.reduce((acc: number, schema: any) => {
+    return (
+      acc +
+      schema.attestations.filter((attestation: any) => !attestation.isOffchain)
+        .length
+    );
+  }, 0);
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -67,15 +83,22 @@ export const HomeScreen = () => {
 
       <div className="grid grid-cols-3 gap-10 mt-4 mb-4">
         <StatsCard
-          title="OffChain Attestation"
-          value="200"
+          title="All Schemas"
+          value={data.schemata.length ?? "Err"}
+          change="+4.5%"
+          changeText="from last week"
+          changeColor="bg-lime-400/20 text-lime-700"
+        />
+        <StatsCard
+          title="OnChain Attestation"
+          value={onChainCount}
           change="+4.5%"
           changeText="from last week"
           changeColor="bg-lime-400/20 text-lime-700"
         />
         <StatsCard
           title="OffChain Attestation"
-          value="200"
+          value={offChainCount}
           change="+4.5%"
           changeText="from last week"
           changeColor="bg-lime-400/20 text-lime-700"

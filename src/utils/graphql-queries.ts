@@ -24,6 +24,9 @@ export const GET_ATTESTATIONS_BY_WALLET_ID = gql`
       _count {
         attestations
       }
+      attestations {
+        isOffchain
+      }
     }
   }
 `;
