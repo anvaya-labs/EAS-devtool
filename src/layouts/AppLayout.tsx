@@ -73,31 +73,25 @@ export const RootLayout = () => {
                 <span className="sr-only">Acme Inc</span>
               </Link>
               <Link className="hover:text-foreground" to={""}>
-                Dashboard
+                Home
               </Link>
               <Link
                 className="text-muted-foreground hover:text-foreground"
                 to={""}
               >
-                Orders
+                About
               </Link>
               <Link
                 className="text-muted-foreground hover:text-foreground"
                 to={""}
               >
-                Products
+                Developers
               </Link>
               <Link
                 className="text-muted-foreground hover:text-foreground"
                 to={""}
               >
-                Customers
-              </Link>
-              <Link
-                className="text-muted-foreground hover:text-foreground"
-                to={""}
-              >
-                Analytics
+                Profile
               </Link>
             </nav>
           </SheetContent>
