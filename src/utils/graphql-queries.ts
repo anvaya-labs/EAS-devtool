@@ -16,16 +16,14 @@ export const GET_ATTESTATIONS = gql`
 `;
 
 export const GET_ATTESTATIONS_BY_WALLET_ID = gql`
-  query Attestations($where: AttestationWhereInput) {
-    attestations(take: 25, orderBy: { time: desc }, where: $where) {
+  query Schemata($where: SchemaWhereInput) {
+    schemata(where: $where) {
+      schema
+      index
       id
-      attester
-      recipient
-      refUID
-      revocable
-      revocationTime
-      expirationTime
-      data
+      _count {
+        attestations
+      }
     }
   }
 `;

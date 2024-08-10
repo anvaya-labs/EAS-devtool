@@ -25,7 +25,7 @@ export const SchemaDetailScreen = () => {
   const { loading, error, data } = useQuery(GET_SCHEMA_BY_ID, {
     variables: {
       where: {
-        id: "0x69c1d84f18dd90216065aeb6d8ce2f64360cbc6646fa3f2dace2bde9d7f77bec",
+        id: schemaId,
       },
     },
   });

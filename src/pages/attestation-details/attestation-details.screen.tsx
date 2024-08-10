@@ -1,36 +1,20 @@
-import { StatsCard } from "@/components";
-import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-  TableCell,
-  Table,
-} from "@/components/ui/table";
 import { formatDateTime } from "@/utils/format";
 import { GET_ATTESTATION_BY_ID } from "@/utils/graphql-queries";
 import { useQuery } from "@apollo/client";
-import { ArrowDown, ArrowUp, Send } from "lucide-react";
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  Key,
-} from "react";
+import { ArrowDown, ArrowUp } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export const AttestationDetails = () => {
   const navigate = useNavigate();
+  const { attestationId } = useParams();
+
   const { loading, error, data } = useQuery(GET_ATTESTATION_BY_ID, {
     variables: {
       where: {
-        id: "0xf51c217020919e93b022b5b65c396162aeff567b9bf07b2d3b7fbe4ceae232e0",
+        id: attestationId,
       },
     },
   });

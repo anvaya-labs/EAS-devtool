@@ -28,23 +28,26 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { StatsCard } from "@/components";
+import { useAccount } from "wagmi";
 
 //@ts-ignore
 
 export const HomeScreen = () => {
   const [isSchemaModelActive, setIsSchemeModelActive] = useState(false);
   const navigate = useNavigate();
+
+  const { address } = useAccount();
   const { loading, error, data } = useQuery(GET_ATTESTATIONS_BY_WALLET_ID, {
     variables: {
       where: {
-        attester: {
-          equals: "0x9ccCA0a968A9bc5916E0de43Ea2D68321655ae67",
+        creator: {
+          equals: address,
         },
       },
     },
   });
 
-  console.log(data);
+  console.log("data-home", data);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -83,37 +86,6 @@ export const HomeScreen = () => {
         <h2 className="text-base/7 font-semibold text-zinc-950 sm:text-sm/6 dark:text-white">
           My Schemas
         </h2>
-        {/* <Table>
-          <TableCaption>A list of your recent attestations.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">ID</TableHead>
-              <TableHead>Attester</TableHead>
-              <TableHead>Recipient</TableHead>
-              <TableHead>RefUID</TableHead>
-              <TableHead>Revocable</TableHead>
-              <TableHead>Revocation Time</TableHead>
-              <TableHead>Expiration Time</TableHead>
-              <TableHead>Data</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.attestations.map((attestation: any) => (
-              <TableRow
-                key={attestation.id}
-                onClick={() => navigate(`/schema/view/${attestation.id}`)}
-              >
-                <TableCell className="font-medium">{attestation.id}</TableCell>
-                <TableCell>{attestation.attester}</TableCell>
-                <TableCell>{attestation.recipient}</TableCell>
-                <TableCell>{attestation.refUID}</TableCell>
-                <TableCell>{attestation.revocable.toString()}</TableCell>
-                <TableCell>{formatDate(attestation.revocationTime)}</TableCell>
-                <TableCell>{formatDate(attestation.expirationTime)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table> */}
 
         <Table className="mt-4 cursor-pointer">
           <TableHeader>
@@ -125,20 +97,27 @@ export const HomeScreen = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.attestations.map((attestation: any) => (
+            {data.schemata.map((schema: any, index: number) => (
               <TableRow
-                key={attestation.id}
-                onClick={() => navigate(`/schema/view/${attestation.id}`)}
+                key={schema.id}
+                onClick={() => navigate(`/schema/view/${schema.id}`)}
               >
-                <TableCell className="font-medium px-4 py-4">#01</TableCell>
+                <TableCell className="font-medium px-4 py-4">
+                  #{schema.index}
+                </TableCell>
+                <TableCell className="px-4 py-4">{schema.id}</TableCell>
                 <TableCell className="px-4 py-4">
-                  {attestation.refUID}
+                  {schema.schema
+                    .split(", ")
+                    .map((type: string, idx: number) => (
+                      <Badge key={idx} variant="secondary">
+                        {type.split(" ")[0]}
+                      </Badge>
+                    ))}
                 </TableCell>
                 <TableCell className="px-4 py-4">
-                  <Badge variant="secondary">String</Badge>{" "}
-                  <Badge variant="secondary">Bool</Badge>
+                  {schema._count.attestations}
                 </TableCell>
-                <TableCell className="px-4 py-4">5</TableCell>
               </TableRow>
             ))}
           </TableBody>
