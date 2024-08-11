@@ -17,10 +17,13 @@ import { useQuery } from "@apollo/client";
 import { GET_SCHEMA_BY_ID } from "@/utils/graphql-queries";
 import { formatDateTime } from "@/utils/format";
 import { truncateString } from "@/utils/misc";
+import { EasAttest } from "eas-react";
+import { useEthersSigner } from "@/utils/wagmi-utils";
 
 export const SchemaDetailScreen = () => {
   const { schemaId } = useParams();
   const navigate = useNavigate();
+  const signer = useEthersSigner();
 
   const { loading, error, data } = useQuery(GET_SCHEMA_BY_ID, {
     variables: {
@@ -147,7 +150,15 @@ export const SchemaDetailScreen = () => {
       </div>
 
       <div>
-        <Button className="w-full">Attest this Schema</Button>
+        <EasAttest 
+        text="Attest this Schema"
+        schemaId={schemaId!}
+        network="sepolia"
+        signer={signer!}
+        buttonProps={{
+          width: "full"
+        }}
+         />
       </div>
 
       <h2 className="text-base/7 font-semibold text-zinc-950 sm:text-sm/6 dark:text-white">
