@@ -1,17 +1,17 @@
 
 
-# EAS DevTool & UI Kit
+# EAS DevTool & EAS React SDK
 
 This project is built on top of the Ethereum Attestation Service (EAS). The problem with EASScan is that it doesn't allow users to view their own schemas and attestations in one centralized place—everything is scattered. The role of explorers should be to provide essential stats and easy access to key information.
 
 ## This project has two main components:
 
 1. **DevTool**: A platform where you can manage, view, and attest data. It provides a comprehensive interface to interact with your schemas and attestations.
-2. **EAS UI Kit**: A plug-and-play React component designed to create and attest schemas seamlessly. Think of it as the WalletConnect button, but for EAS.
+2. **EAS React SDK**: A plug-and-play React component designed to create and attest schemas seamlessly. Think of it as the WalletConnect button, but for EAS.
 
 ## Technology Stack
 
-- **EAS SDK**: The core of the Ethereum Attestation Service, enabling easy interaction with the EAS protocol.
+- **Ethereum Attestation Service SDK**: The core of the Ethereum Attestation Service, enabling easy interaction with the EAS protocol.
 - **React**: A popular JavaScript library for building user interfaces.
 - **Wagmi**: React hooks for Ethereum, helping with wallet connection and other Ethereum-related functionalities.
 - **ethers**: A complete Ethereum wallet implementation and utilities in JavaScript (and TypeScript).
@@ -25,11 +25,13 @@ This project is built on top of the Ethereum Attestation Service (EAS). The prob
 - **View**: Easily view your schemas and attestations without the hassle of navigating through scattered information.
 - **Attest**: Attest data with a simple and intuitive interface.
 
-### EAS UI Kit
+### EAS React SDK
 
-- **Plug-and-Play**: Integrate the EAS UI Kit into your React application with ease.
+It uses [Ethereum Attestation Service SDK](https://github.com/ethereum-attestation-service/eas-sdk) under the hood to provide the following features:
+
+- **Plug-and-Play**: Integrate the EAS React SDK into your React application with ease.
 - **Create Schemas**: Easily create new schemas within your application.
-- **Attest Schemas**: Attest schemas directly from the UI Kit, simplifying the process for end-users.
+- **Attest Schemas**: Attest schemas directly from the EAS React SDK, simplifying the process for end-users.
 
 ## Getting Started
 
@@ -70,7 +72,7 @@ Ensure you have the following installed:
 ### Usage
 
 - **DevTool**: Navigate to the `/devtool` path to manage, view, and attest your EAS data.
-- **EAS UI Kit**: Import and integrate the UI Kit into your React components to enable schema creation and attestation.
+- **EAS React SDK**: Import and integrate the EAS React SDK into your React components to enable schema creation and attestation.
 
 ## Contributions
 
@@ -86,7 +88,7 @@ Contributions are welcome! If you'd like to contribute, please fork the reposito
 
 **Sweta Shaw**
 
-- **Twitter**: [@sweta](https://twitter.com/)
-- **LinkedIn**: [Sweta Shaw](https://www.linkedin.com/)
-- **GitHub**: [swetashaw](https://github.com/)
+- **Twitter**: [@sweta](https://twitter.com/swetashaw_)
+- **LinkedIn**: [Sweta Shaw](https://www.linkedin.com/sweta-shaw)
+- **GitHub**: [swetashaw](https://github.com/swetshaw)
 
