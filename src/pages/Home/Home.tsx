@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { useQuery } from "@apollo/client";
 import { GET_ATTESTATIONS_BY_WALLET_ID } from "@/utils/graphql-queries";
 
@@ -11,8 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { PlusIcon } from "lucide-react";
-import { CreateSchema } from "@/features";
 import {
   Pagination,
   PaginationContent,
@@ -27,12 +24,14 @@ import { Badge } from "@/components/ui/badge";
 import { StatsCard } from "@/components";
 import { useAccount } from "wagmi";
 import { truncateString } from "@/utils/misc";
+import {EasCreateSchema} from "eas-react"
+import { useEthersSigner } from "@/utils/wagmi-utils";
 
 //@ts-ignore
 
 export const HomeScreen = () => {
-  const [isSchemaModelActive, setIsSchemeModelActive] = useState(false);
   const navigate = useNavigate();
+  const signer = useEthersSigner()
 
   const { address } = useAccount();
 
@@ -69,13 +68,14 @@ export const HomeScreen = () => {
     <div>
       <div className="flex items-center justify-between">
         <p className="text-lg font-semibold">Welcome Back!!</p>
-        <Button
-          onClick={() => {
-            setIsSchemeModelActive(true);
+        <EasCreateSchema network='sepolia'
+          signer={signer!}
+          onSchemaCreated={(schemaId) => {
+            console.log('Schema created:', schemaId);
+            // navigate to the schema details page
+            navigate(`/schema/view/${schemaId}`)
           }}
-        >
-          <PlusIcon className="mr-2 h-4 w-4" /> New Schema
-        </Button>
+        />
       </div>
 
       <div className="grid grid-cols-3 gap-10 mt-4 mb-4">
@@ -172,10 +172,6 @@ export const HomeScreen = () => {
           </PaginationContent>
         </Pagination>
       </div>
-      <CreateSchema
-        isSchemaModelActive={isSchemaModelActive}
-        setIsSchemeModelActive={setIsSchemeModelActive}
-      />
     </div>
   );
 };
