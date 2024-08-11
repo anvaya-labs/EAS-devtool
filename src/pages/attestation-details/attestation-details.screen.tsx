@@ -3,12 +3,13 @@ import { formatDateTime } from "@/utils/format";
 import { GET_ATTESTATION_BY_ID } from "@/utils/graphql-queries";
 import { useQuery } from "@apollo/client";
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export const AttestationDetails = () => {
   const { attestationId } = useParams();
+  const navigate = useNavigate();
 
   const { loading, error, data } = useQuery(GET_ATTESTATION_BY_ID, {
     variables: {
@@ -117,13 +118,17 @@ export const AttestationDetails = () => {
                 <Badge variant="secondary">
                   #{data?.getAttestation?.schema?.index ?? "N/A"}
                 </Badge>{" "}
-                <a
+                {/* <a
                   className="text-blue-600 hover:underline"
                   target="_next"
                   href={`https://sepolia.easscan.org/schema/view/${data?.getAttestation?.schemaId}`}
-                >
-                  <p className="">{data?.getAttestation?.schemaId}</p>{" "}
-                </a>
+                > */}
+                <p className="text-blue-600 hover:underline"
+                  onClick={() => {
+                    navigate(`/schema/view/${data?.getAttestation?.schemaId}`);
+                  }}
+                >{data?.getAttestation?.schemaId}</p>{" "}
+                {/* </a> */}
               </div>
             </dd>
 
@@ -132,7 +137,7 @@ export const AttestationDetails = () => {
             </dt>
             <dd className="pb-3 pt-1 text-zinc-950 sm:border-t sm:border-zinc-950/5 sm:py-3 dark:text-white dark:sm:border-white/5 sm:[&:nth-child(2)]:border-none">
               {data?.getAttestation?.refUID ===
-              "0x0000000000000000000000000000000000000000000000000000000000000000"
+                "0x0000000000000000000000000000000000000000000000000000000000000000"
                 ? "No attestation(s)"
                 : data?.getAttestation?.refUID}
             </dd>
