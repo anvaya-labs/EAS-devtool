@@ -1,4 +1,3 @@
-import { useState } from "react";
 // import { Button } from "@/components/ui/button";
 import { useQuery } from "@apollo/client";
 import { GET_ATTESTATIONS_BY_WALLET_ID } from "@/utils/graphql-queries";
