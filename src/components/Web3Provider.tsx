@@ -1,14 +1,13 @@
 import { createConfig, http, WagmiProvider } from "wagmi";
-import { mainnet, sepolia } from "wagmi/chains";
+import { sepolia } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConnectKitProvider, getDefaultConfig } from "connectkit";
 
 const config = createConfig(
   getDefaultConfig({
     // Your dApps chains
-    chains: [mainnet, sepolia],
+    chains: [sepolia],
     transports: {
-      [mainnet.id]: http(import.meta.env.VITE_MAINNET_URL),
       [sepolia.id]: http(import.meta.env.VITE_SEPOLIA_URL),
     },
 
