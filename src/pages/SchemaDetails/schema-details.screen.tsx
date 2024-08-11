@@ -158,6 +158,10 @@ export const SchemaDetailScreen = () => {
         buttonProps={{
           width: "full"
         }}
+        onAttestationComplete={(attestation) => {
+          console.log('Attestation complete', attestation);
+          navigate(`/attestation/view/${attestation.attestationUid}`);
+        }}
          />
       </div>
 
