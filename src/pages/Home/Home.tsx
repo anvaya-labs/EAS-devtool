@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { StatsCard } from "@/components";
 import { useAccount } from "wagmi";
 import { truncateString } from "@/utils/misc";
-import {EasCreateSchema} from "eas-react"
+import { EasCreateSchema } from "eas-react"
 import { useEthersSigner } from "@/utils/wagmi-utils";
 
 //@ts-ignore
@@ -130,12 +130,14 @@ export const HomeScreen = () => {
                 </TableCell>
                 <TableCell className="px-4 py-4">
                   {schema.schema
-                    .split(", ")
-                    .map((type: string, idx: number) => (
-                      <Badge key={idx} variant="secondary">
-                        {type.split(" ")[0]}
-                      </Badge>
-                    ))}
+                    .split(",")
+                    .map((type: string, idx: number) => {
+                      return (
+                        <Badge key={idx} variant="secondary">
+                          {type}
+                        </Badge>
+                      )
+                    })}
                 </TableCell>
                 <TableCell className="px-4 py-4">
                   {schema._count.attestations}
@@ -153,10 +155,10 @@ export const HomeScreen = () => {
               <PaginationPrevious href="#" />
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
+              <PaginationLink href="#" isActive>1</PaginationLink>
             </PaginationItem>
             <PaginationItem>
-              <PaginationLink href="#" isActive>
+              <PaginationLink href="#">
                 2
               </PaginationLink>
             </PaginationItem>
