@@ -35,6 +35,10 @@ export const HomeScreen = () => {
   const navigate = useNavigate();
 
   const { address } = useAccount();
+
+  if (!address) {
+    return <div>Please Connect Your Wallet</div>;
+  }
   const { loading, error, data } = useQuery(GET_ATTESTATIONS_BY_WALLET_ID, {
     variables: {
       where: {
